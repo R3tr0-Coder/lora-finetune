@@ -1,0 +1,33 @@
+# Core ML stack
+torch>=2.2.0
+transformers>=4.40.0
+datasets>=2.18.0
+
+# LoRA / PEFT
+peft>=0.10.0
+trl>=0.8.6
+
+# Quantisation
+bitsandbytes>=0.43.0
+accelerate>=0.29.0
+
+# Tokenisation helpers
+sentencepiece>=0.1.99
+einops>=0.7.0
+
+# Logging & experiment tracking
+wandb>=0.17.0
+tensorboard>=2.16.0
+
+# Config & utilities
+pyyaml>=6.0
+matplotlib>=3.8.0
+pandas>=2.2.0
+
+# Hub
+huggingface-hub>=0.22.0
+
+# Dev / test
+pytest>=8.0.0
+pytest-mock>=3.14.0
+nbformat>=5.9.0

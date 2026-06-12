@@ -1,0 +1,39 @@
+# configs/lora_llama32_1b.yaml
+#
+# LoRA config for Llama-3.2-1B-Instruct.
+# Requires: huggingface-cli login  (gated model — accept Meta's ToS first)
+# VRAM:     ~8 GB with 4-bit; fits T4 comfortably.
+
+base_model:    meta-llama/Llama-3.2-1B-Instruct
+output_dir:    outputs/lora-llama32-1b
+hub_model_id:  null
+
+dataset_name:      timdettmers/openassistant-guanaco
+dataset_text_col:  text
+response_template: "### Assistant:"
+max_seq_len:       1024
+
+lora_r:              16
+lora_alpha:          32
+lora_dropout:        0.05
+lora_target_modules:
+  - q_proj
+  - v_proj
+  - k_proj
+  - o_proj
+
+use_4bit:          true
+bnb_compute_dtype: bfloat16
+
+batch_size:     4
+grad_accum:     4
+learning_rate:  2.0e-4
+num_epochs:     1
+max_steps:     -1
+warmup_ratio:   0.03
+lr_scheduler:   cosine
+weight_decay:   0.001
+logging_steps:  10
+save_steps:     100
+report_to:      tensorboard
+seed:           42

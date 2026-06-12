@@ -1,0 +1,48 @@
+# configs/lora_tinyllama.yaml
+#
+# LoRA fine-tuning config for TinyLlama-1.1B-Chat on OpenAssistant Guanaco.
+# Runs on a free-tier Colab T4 (16 GB) in ~25 minutes.
+#
+# Usage:
+#   python -m src.trainer --config configs/lora_tinyllama.yaml
+#   python -m src.trainer --config configs/lora_tinyllama.yaml --max_steps 50
+
+# ── Model ──────────────────────────────────────────────────────────────────────
+base_model:    TinyLlama/TinyLlama-1.1B-Chat-v1.0
+output_dir:    outputs/lora-tinyllama
+hub_model_id:  null   # set to "your-username/tinyllama-lora" to push
+
+# ── Dataset ────────────────────────────────────────────────────────────────────
+dataset_name:      timdettmers/openassistant-guanaco
+dataset_text_col:  text
+response_template: "### Assistant:"
+max_seq_len:       1024
+
+# ── LoRA ──────────────────────────────────────────────────────────────────────
+lora_r:              16     # rank
+lora_alpha:          32     # scaling = alpha / r
+lora_dropout:        0.05
+lora_target_modules:
+  - q_proj
+  - v_proj
+  # Uncomment for more capacity (more VRAM):
+  # - k_proj
+  # - o_proj
+
+# ── Quantisation ──────────────────────────────────────────────────────────────
+use_4bit:          true
+bnb_compute_dtype: bfloat16
+
+# ── Training ──────────────────────────────────────────────────────────────────
+batch_size:     4
+grad_accum:     4       # effective batch = 16
+learning_rate:  2.0e-4
+num_epochs:     1
+max_steps:     -1       # -1 = full epoch; set 50 for a smoke test
+warmup_ratio:   0.03
+lr_scheduler:   cosine
+weight_decay:   0.001
+logging_steps:  10
+save_steps:     100
+report_to:      tensorboard
+seed:           42
