@@ -179,31 +179,6 @@ The pipeline adapts automatically:
 | **MLflow tracking** | `report_to: mlflow` in YAML config |
 | **Multi-GPU** | `accelerate launch --multi_gpu -m src.trainer --config ...` |
 
----
-
-## Interview talking points
-
-> *"I used QLoRA — 4-bit NF4 quantisation plus LoRA — so the entire fine-tune fit on a
-> single T4. The base model weights are frozen; only the low-rank adapter matrices
-> (about 0.3% of total parameters) are trained."*
-
-> *"I targeted `q_proj` and `v_proj` because those are the attention projections most
-> responsible for in-context behaviour. The experiment matrix in the notebook shows the
-> capacity–VRAM trade-off for adding more modules."*
-
-> *"I used `DataCollatorForCompletionOnlyLM` to mask the prompt tokens from the loss.
-> Without that, the model wastes capacity imitating the human turn and the training
-> loss is artificially low."*
-
-> *"After training I merge the adapter with `merge_and_unload()`, which folds BA into W
-> so inference has zero PEFT overhead and the checkpoint is a standard HuggingFace model
-> you can load anywhere."*
-
-> *"The whole training loop is in a YAML-configurable CLI script so it can be dropped
-> into any CI/CD pipeline or cloud GPU job — no notebook required."*
-
----
-
 ## License
 
 MIT — use freely, attribution appreciated.
